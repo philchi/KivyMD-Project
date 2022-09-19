@@ -1,0 +1,296 @@
+#:kivy 2.1.0
+ScreenManager:
+    clock:
+    regiSelect:
+    timerSelect:
+
+<clock>:
+    MDBoxLayout:
+        md_bg_color: app.theme_cls.primary_color
+
+        MDBottomNavigation:
+
+            MDBottomNavigationItem:
+                name: 'Clock'
+                text: 'Clock'
+                icon: 'clock-outline'
+
+                MDBoxLayout:
+                    orientation: 'vertical'
+                    spacing: "10dp"
+
+                    MDRelativeLayout:
+                        size_hint_y: None
+                        height: '50dp'
+
+                        MDIconButton:
+                            icon: 'earth'
+                            pos_hint: {'right': 1, 'bottom': 1}
+
+                            on_release:
+                                root.manager.current = 'regiSelect'
+
+                    MDLabel:
+                        size_hint: 1, 0.7
+                        pos_hint: {'center_x': .5, 'center_y': .5}
+
+                    MDLabel:
+                        id: time1
+                        text: '00:00:00'
+                        font_style: 'H3'
+                        size_hint: 0.8, 0.3
+                        pos_hint: {'center_x': .5, 'center_y': .5}
+
+                    MDLabel:
+                        id: time2
+                        text: ' '
+                        font_style: 'H3'
+                        size_hint: 0.8, 0.6
+                        pos_hint: {'center_x': .5, 'center_y': .5}
+                    
+                    
+                    MDLabel:
+                        pos_hint: {'center_x': .5, 'center_y': .5}
+
+            MDBottomNavigationItem:
+                name: 'Timer'
+                text: 'Timer'
+                icon: 'av-timer'
+
+                MDBoxLayout:
+                    orientation: 'vertical'
+
+                    MDRelativeLayout:
+                        size_hint_y: None
+                        height: '50dp'
+
+                        MDRectangleFlatButton:
+                            text: 'Select Time'
+                            pos: root.width - 110, 5
+                            on_release: root.manager.current = 'timerSelect'
+                    
+                    MDRelativeLayout:
+                        size_hint_y: None
+                        height: '50dp'
+
+                        MDIconButton:
+                            icon: 'alarm-note'
+                            pos_hint: {'right': 1, 'top': 1}
+                            on_release: root.selRingtone()
+
+                    MDLabel:
+                        size_hint: 1, 0.7
+                        pos_hint: {'center_x': .5, 'center_y': .5}
+
+                    MDRelativeLayout:
+                        id: timerSc
+                        #md_bg_color: 'gray'
+
+                        MDLabel:
+                            id: timer
+                            text: '00:00:00'
+                            font_style: 'H3'
+                            size_hint: .8, None
+                            pos: 100, 20
+
+                        MDRectangleFlatButton:
+                            id: timerStart
+                            text: 'start'
+                            size_hint: None, None
+                            pos: 470, 52.5
+
+                            on_release: root.timerBut()
+
+                        MDRectangleFlatButton:
+                            text: 'cancel'
+                            size_hint: None, None
+                            size: 180, 50
+                            pos: 370, 52
+
+                            on_release: root.resetTimer()
+
+                    MDRelativeLayout:
+                        size_hint: 0.8, 0.6
+                        pos_hint: {'center_x': .5, 'center_y': .5}
+                    
+                    MDLabel:
+                        pos_hint: {'center_x': .5, 'center_y': .5}
+
+            MDBottomNavigationItem:
+                name: 'Stopwatch'
+                text: 'Stopwatch'
+                icon: 'timer-outline'
+
+                MDBoxLayout:
+                    orientation: 'vertical'
+                    spacing: "10dp"
+
+                    MDRelativeLayout:
+                        size_hint_y: None
+                        height: '40dp'
+
+                    MDRelativeLayout:
+                        id: timerSc
+                        size_hint_y: None
+                        height: '200dp'
+
+                        MDLabel:
+                            id: stopwatch
+                            text: '00:00:00.00'
+                            font_style: 'H3'
+                            size_hint: .8, None
+                            pos: 100, 20
+
+                        MDRectangleFlatButton:
+                            id: swStart
+                            text: 'start'
+                            size_hint: None, None
+                            pos: 520, 52.5
+
+                            on_release: root.stopwatchBut()
+
+                        MDRectangleFlatButton:
+                            id: swCancel
+                            text: 'cancel'
+                            size_hint: None, None
+                            size: 180, 50
+                            pos: 420, 52
+
+                            on_release: root.resetSW()
+
+                    MDRelativeLayout:
+                        id: swScrollLayout
+                        size_hint: 0.8, 0.6
+                        pos_hint: {'center_x': .5, 'center_y': .5}
+
+                        ScrollView:
+                            id: swScroll
+                            
+                            MDList:
+                                id: swLaps
+                    
+                    MDRelativeLayout:
+                        size_hint_y: None
+                        height: '50dp'
+    
+<regiSelect>:
+    MDBoxLayout:
+        orientation: 'vertical'
+
+        MDRelativeLayout:
+            size_hint_y: None
+            height: '55dp'
+
+            MDIconButton:
+                icon: 'menu-down'
+                icon_size: '24sp'
+                pos_hint: {'right': 1, 'top': 1}
+
+                on_release:
+                    root.manager.current = 'clock'
+
+            MDRelativeLayout:
+                size_hint_x: .8
+                pos_hint: {'center_x': .5, 'center_y': .3}
+                height: '70dp'
+
+                MDTextField:
+                    id: textbox
+                    hint_text: 'Search timezone'
+                    on_text_validate: root.regSearch()
+
+        MDRelativeLayout:
+            size_hint_y: None
+            height: root.height - 55
+
+            ScrollView:
+                scroll_y: 0
+                MDList:
+                    id: regions
+
+<tzItem>:
+    font_style: 'H5'
+    on_release: self.clock.changeReg(self.text)
+
+<timerSelect>:
+    MDBoxLayout:
+        orientation: 'vertical'
+        spacing: "15dp"
+
+        MDRelativeLayout:
+            size_hint_y: None
+            height: '50dp'
+
+            MDRectangleFlatButton:
+                text: 'Done'
+                pos: root.width - 73, 5
+                on_release:
+                    root.returnSc()
+                    root.manager.current = 'clock'
+            
+            MDRectangleFlatButton:
+                text: 'Cancel'
+                pos: root.width - 153, 5
+                on_release: root.manager.current = 'clock'
+        
+        MDRelativeLayout:
+            size_hint_y: None
+            height: '60dp'
+
+            MDLabel:
+                id: timerPrev
+                text: '00:00:00'
+                halign: 'center'
+                font_style: 'H3'
+
+        MDBoxLayout:
+            orientation: 'horizontal'
+            size_hint: 0.6, 0.4
+            pos_hint: {'center_x': .5, 'center_y': .5}
+            #md_bg_color: 'gray'
+            
+            ScrollView:
+                do_scroll_x: False
+                bar_width: 0
+                MDBoxLayout:
+                    id: hrs
+                    orientation: 'vertical'
+                    padding: 10
+                    adaptive_size: True
+            
+            ScrollView:
+                do_scroll_x: False
+                bar_width: 0
+                MDBoxLayout:
+                    id: mins
+                    orientation: 'vertical'
+                    padding: 10
+                    adaptive_size: True
+
+            ScrollView:
+                do_scroll_x: False
+                bar_width: 0
+                MDBoxLayout:
+                    id: secs
+                    orientation: 'vertical'
+                    padding: 10
+                    adaptive_size: True
+        
+        MDRelativeLayout:
+            size_hint_y: None
+            height: '100dp'
+
+<tsButton>:
+    size_hint: None, None
+    size: 135, 40
+    on_release: self.sc.changeTimerPrev(self)
+
+<ItemConfirm>:
+    on_release:self.set_icon(check)
+    CheckboxLeftWidget:
+        id: check
+        group: 'check'
+
+<rtSelect>:
+    size_hint: 0.8, None
+    height: '250dp'
